@@ -31,6 +31,18 @@ td{padding:11px 10px;border-top:1px solid #202942;border-bottom:1px solid #20294
 .hero-note{padding:14px;border:1px solid var(--line);background:#0b0f1c;border-radius:16px;color:#d4dbea;line-height:1.45} .hide{display:none!important}
 .modal{display:none;position:fixed;inset:0;background:rgba(2,4,10,.76);backdrop-filter:blur(8px);z-index:5000;padding:24px;align-items:center;justify-content:center} .modal.show{display:flex} .modal-box{width:min(1040px,96vw);max-height:90vh;overflow:auto;background:#0d111e;border:1px solid var(--line);border-radius:24px;box-shadow:0 25px 80px rgba(0,0,0,.55);padding:22px} .modal-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px} .modal-head h3{margin:0;font-size:24px} .close{background:#171d2e;color:white;border:1px solid var(--line);border-radius:12px;padding:8px 11px;cursor:pointer} .detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0} .detail-cell{background:#101625;border:1px solid var(--line);border-radius:14px;padding:10px} .detail-cell b{display:block;font-size:16px} .detail-cell span{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em} textarea{width:100%;min-height:310px;background:#080c16;color:#e8edf8;border:1px solid var(--line);border-radius:16px;padding:14px;font-family:Consolas,monospace;font-size:12px;line-height:1.45}
 @media(max-width:1100px){.app{display:block}.sidebar{height:auto;position:relative}.nav{flex-direction:row;overflow:auto}.grid4,.grid3,.layout,.filters-layout{grid-template-columns:1fr}.filter-panel{position:relative;top:auto}}
+
+.sidebar{overflow-y:auto}
+.sidebarFilters{border-top:1px solid var(--line);padding-top:14px;margin-top:2px}
+.sidebarFilters h3{margin:0 0 12px;color:#cbd3e8;font-size:12px;text-transform:uppercase;letter-spacing:.14em}
+.sidebarFilters .filter-field{margin-bottom:10px}
+.sidebarFilters .filter-field label{font-size:10px;margin-bottom:6px}
+.sidebarFilters input,.sidebarFilters select{width:100%;min-width:0;padding:10px 11px;border-radius:12px;font-size:12px;background:#151a2b}
+.sidebarFilters .btn.full{padding:9px 10px;font-size:12px}
+.sidebarFilters .count-note{font-size:11px;line-height:1.35}
+#lease-events .card{padding:18px 18px 12px}
+#lease-events .tableWrap{max-height:calc(100vh - 230px)}
+
 </style>
 </head>
 <body>
@@ -44,6 +56,19 @@ td{padding:11px 10px;border-top:1px solid #202942;border-bottom:1px solid #20294
     <a href="#market-ai">Market AI</a>
     <a href="#qa">Data QA</a>
   </nav>
+
+  <div class="sidebarFilters" id="sidebarLeaseFilters">
+    <h3>Lease filters</h3>
+    <div class="filter-field"><label>Search</label><input id="leaseSearch" placeholder="Tenant / address..." oninput="applyLeaseFilters()"></div>
+    <div class="filter-field"><label>Region</label><select id="regionFilter" onchange="applyLeaseFilters()"></select></div>
+    <div class="filter-field"><label>Submarket</label><select id="submarketFilter" onchange="applyLeaseFilters()"></select></div>
+    <div class="filter-field"><label>Expiration</label><select id="windowFilter" onchange="applyLeaseFilters()"></select></div>
+    <div class="filter-field"><label>Priority</label><select id="priorityFilter" onchange="applyLeaseFilters()"></select></div>
+    <div class="filter-field"><label>Min SF</label><select id="minSfFilter" onchange="applyLeaseFilters()"></select></div>
+    <button class="btn full" onclick="resetLeaseFilters()">Reset</button>
+    <p class="count-note" id="leaseCountNote"></p>
+  </div>
+
   <div class="sidebarFooter"><b>Updated build</b><br>Lease filters, sortable comp and lease tables, no availability tab, and clickable comp detail prompts.</div>
 </aside>
 
@@ -63,21 +88,8 @@ td{padding:11px 10px;border-top:1px solid #202942;border-bottom:1px solid #20294
   </section>
 
   <section id="lease-events">
-    <div class="filters-layout">
-      <aside class="filter-panel">
-        <h3>Search and filters</h3>
-        <div class="filter-field"><label>Search tenant / address</label><input id="leaseSearch" placeholder="Search tenant, address, city, landlord..." oninput="applyLeaseFilters()"></div>
-        <div class="filter-field"><label>Dataset focus</label><select id="datasetFocus" onchange="applyLeaseFilters()"><option value="lease">Lease events</option></select></div>
-        <div class="filter-field"><label>Region / focus</label><select id="regionFilter" onchange="applyLeaseFilters()"><option value="">All regions</option><option value="Northern New Jersey">Northern New Jersey</option><option value="PA I-81/78 Corridor">PA I-81/78 Corridor</option><option value="Philadelphia">Philadelphia</option><option value="Unassigned">Unassigned</option></select></div>
-        <div class="filter-field"><label>Submarket</label><select id="submarketFilter" onchange="applyLeaseFilters()"><option value="">All</option><option value="Bergen Central">Bergen Central</option><option value="Bergen North">Bergen North</option><option value="Berks County">Berks County</option><option value="Bucks County">Bucks County</option><option value="Burlington County">Burlington County</option><option value="Camden County">Camden County</option><option value="Chester County">Chester County</option><option value="Cumberland County">Cumberland County</option><option value="Dauphin County">Dauphin County</option><option value="Delaware County">Delaware County</option><option value="Exit 10">Exit 10</option><option value="Exit 12">Exit 12</option><option value="Exit 7A/Trenton">Exit 7A/Trenton</option><option value="Exit 8/Princeton">Exit 8/Princeton</option><option value="Exit 8A">Exit 8A</option><option value="Exit 9">Exit 9</option><option value="Gloucester County">Gloucester County</option><option value="Hudson Waterfront">Hudson Waterfront</option><option value="Lancaster County">Lancaster County</option><option value="Lebanon County">Lebanon County</option><option value="Lehigh County">Lehigh County</option><option value="Lehigh/Northampton">Lehigh/Northampton</option><option value="Linden/Elizabeth">Linden/Elizabeth</option><option value="Luzerne County">Luzerne County</option><option value="Meadowlands">Meadowlands</option><option value="Middlesex">Middlesex</option><option value="Monmouth">Monmouth</option><option value="Montgomery County">Montgomery County</option><option value="Morris">Morris</option><option value="New Castle County">New Castle County</option><option value="Newark">Newark</option><option value="Northampton County">Northampton County</option><option value="Parkway Corridor">Parkway Corridor</option><option value="Philadelphia County">Philadelphia County</option><option value="Piscataway/Brunswicks/Route">Piscataway/Brunswicks/Route</option><option value="Princeton">Princeton</option><option value="Route 46/23/3">Route 46/23/3</option><option value="Route 78 West">Route 78 West</option><option value="Schuylkill County">Schuylkill County</option><option value="Somerset">Somerset</option><option value="Union Central">Union Central</option><option value="Vacant Land">Vacant Land</option><option value="York County">York County</option></select></div>
-        <div class="filter-field"><label>Expiration window</label><select id="windowFilter" onchange="applyLeaseFilters()"><option value="">All</option><option value="Expired">Expired</option><option value="0-12 months">0-12 months</option><option value="12-24 months">12-24 months</option><option value="24-36 months">24-36 months</option><option value="36+ months">36+ months</option><option value="Unknown">Unknown</option></select></div>
-        <div class="filter-field"><label>BD Priority</label><select id="priorityFilter" onchange="applyLeaseFilters()"><option value="">All</option><option value="High">High</option><option value="Medium">Medium</option><option value="Watch">Watch</option></select></div>
-        <div class="filter-field"><label>Minimum SF</label><select id="minSfFilter" onchange="applyLeaseFilters()"><option value="0">All sizes</option><option value="50000">50,000+ SF</option><option value="100000">100,000+ SF</option><option value="250000">250,000+ SF</option><option value="500000">500,000+ SF</option><option value="1000000">1,000,000+ SF</option></select></div>
-        <button class="btn full" onclick="resetLeaseFilters()">Reset filters</button>
-        <p class="count-note" id="leaseCountNote"></p>
-      </aside>
-      <div class="card">
-        <h3>Lease Events</h3>
+    <div class="card">
+      <div class="control-row"><h3>Lease Events</h3><span class="count-note">Filters are now in the left sidebar so the table can use the full workspace.</span></div>
         <p class="small-note">Click column headers to sort ascending / descending. Filters update the rows below.</p>
         <div class="tableWrap">
           <table id="leaseTable">
@@ -2427,7 +2439,6 @@ td{padding:11px 10px;border-top:1px solid #202942;border-bottom:1px solid #20294
           </table>
         </div>
       </div>
-    </div>
   </section>
 
   <section id="comps">
