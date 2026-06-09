@@ -326,7 +326,7 @@ html,body{max-width:100%;overflow-x:hidden}
         <h1>Market Command</h1>
       </div>
     </div>
-    <p>PHL-PAC-NNJ Industrial Market Intelligence & BD Dashboard</p>
+    <p>PHL-PAC-NNJ Industrial Market Intelligence & BD Dashboard<br><span style="color:#9da9c8;font-size:12px">Session access expires after 2 hours.</span></p>
     <div class="loginField">
       <label>Username</label>
       <input id="loginUser" type="email" autocomplete="username" placeholder="jleskow@savills.us">
@@ -9431,55 +9431,46 @@ function closeCompDetail() {
   document.getElementById('compModal').classList.remove('show');
 }
 function buildPrompt(r) {
-  var currentComp = r.currentRent || r.startingRent || '—';
-  var delta = r.rentDelta || '—';
-  var story = '';
-  if (r.expirationWindow === '0-12 months') {
-    story = 'Lease event appears 0-12 months, making this a useful market-validation target.';
-  } else if (r.expirationWindow === '12-24 months') {
-    story = 'Lease event sits in a 12-24 month planning window, which is typically a good point to create leverage before the landlord controls the process.';
-  } else {
-    story = 'Lease event can be used as a market-validation target, with the angle focused on renewal planning, relocation alternatives, and negotiating leverage.';
+  var tenant = r.tenant || '[TENANT NAME]';
+  var address = r.address || '[ADDRESS]';
+  var submarket = r.submarket || '[EXIT / SUBMARKET IDENTIFIER]';
+  var market = r.market || '[HIGHWAY / CORRIDOR]';
+  var owner = r.owner || '[OWNER]';
+  var vacancy = r.vacancy || '[SUBMARKET VACANCY RATE]';
+
+  var exp = r.expires || '';
+  var expDate = new Date(exp);
+  var expMonth = '[LEASE EXPIRATION MONTH]';
+  var expYear = '[LEASE EXPIRATION YEAR]';
+  var expMonthYear = '[EXPIRATION MONTH + YEAR]';
+  if (!isNaN(expDate.getTime())) {
+    expMonth = expDate.toLocaleString('en-US', { month: 'long' });
+    expYear = String(expDate.getFullYear());
+    expMonthYear = expMonth + ' ' + expYear;
+  } else if (exp) {
+    expMonthYear = exp;
   }
-  if (!r.currentRent && !r.startingRent) {
-    story += ' Current rent is not available in the source data, so the angle should focus on renewal planning, market leverage, and whether the tenant has credible alternatives.';
-  } else {
-    story += ' Current/comp rent and market rent should be used to frame whether the tenant is above or below market and what leverage may exist.';
-  }
-  return `Create two prospecting email drafts for John Leskow at Savills using the full market context below. Use tenant-representation language, avoid "compare notes" and "worth a conversation," use "tenant," and end with "Either way, please let me know." when appropriate.
 
-Version 1: Short CTA email, ideally under 75 words, with a 1-4 word trigger-based subject line.
+  return `Version 1
 
-Version 2: Longer strategic due-diligence email that makes clear Savills has relevant market intelligence the tenant should review before evaluating renewal, relocation, expansion, consolidation, or restructuring options.
+[NAME],
 
-Selected lease event / comp:
-Tenant: ${r.tenant || '—'}
-Address: ${r.address || '—'}${r.city ? ', ' + r.city : ''}${r.state ? ', ' + r.state : ''}
-Leased SF: ${r.sf || '—'} SF
-Lease type: ${r.leaseType || '—'}
-Commencement: ${r.commenced || '—'}
-Expiration: ${r.expires || '—'}
-Expiration window: ${r.expirationWindow || '—'}
-Current rent / comp rent: ${currentComp}
-Market rent benchmark: ${r.marketRent || '—'} PSF
-Rent delta: ${delta}
-Rent position: ${r.rentPosition || 'Rent unknown'}
-NER: ${r.ner || '—'}
-Free rent: ${r.freeRent || '—'}
-TI/PSF: ${r.ti || '—'}
-Free Rent PSF / Year: ${r.freePsfYr || '—'}
-TI PSF / Year: ${r.tiPsfYr || '—'}
-Total Concessions PSF / Year: ${r.totalConcessionsPsfYr || '—'}
-BD priority: ${r.bdPriority || '—'}
+We recently supported a large industrial tenant with a strategic approach — creating credible market competition to execute an early restructure that protected against an impending rent increase while preserving free rent and other concessions.
 
-Market story:
-${story}
+Given current vacancy along the ${market} and ${tenant}'s ${expMonthYear} lease expiration at ${address} — would you be interested in learning more about our approach and how we create leverage for our tenant clients at ${submarket}?
 
-Building / market context:
-Region/submarket: ${r.market || '—'} / ${r.submarket || '—'}
-Market rent benchmark: ${r.marketRent || '—'} PSF
-Matched lease comps at same building:
-No matched same-building comps available in this popup unless separately confirmed. Use the selected comp, nearby/regional comp context, and market benchmark context instead.`;
+
+Version 2
+
+[NAME],
+
+${owner} recently acquired ${address} as part of a portfolio purchase, which may create a different renewal dynamic for ${tenant}. As you likely know, with institutional ownership, tenants can face pressure if the buyer underwrote rent growth across the portfolio and views upcoming expirations as a path to execute that plan.
+
+We recently supported a large industrial tenant with a strategic approach, creating credible market competition to execute an early restructure that protected against an impending rent increase while preserving free rent and other concessions.
+
+Given ${tenant}’s ${expMonth} ${expYear} lease expiration and ${submarket} vacancy hovering around ${vacancy}, there may be a timely opportunity to create credible market competition before the renewal process is controlled by the landlord.
+
+Would you be interested in learning more about our approach and how we create leverage for our tenant clients in Greater Philadelphia?`;
 }
 function copyPrompt() {
   var box = document.getElementById('promptBox');
@@ -9570,15 +9561,20 @@ initMarketReportButtons();
 
 <script>
 (function(){
+  var AUTH_KEY = 'dashboardAuthExpiresAt';
+  var splash = document.getElementById('loginSplash');
   document.body.classList.add('locked');
   try {
-    if (sessionStorage.getItem('dashboardAuthed') === 'true') {
-      var splash = document.getElementById('loginSplash');
+    var expiresAt = parseInt(localStorage.getItem(AUTH_KEY) || '0', 10);
+    if (expiresAt && Date.now() < expiresAt) {
       if (splash) splash.style.display = 'none';
       document.body.classList.remove('locked');
+    } else {
+      localStorage.removeItem(AUTH_KEY);
     }
   } catch(e) {}
 })();
+
 function dashboardLogin(event) {
   event.preventDefault();
   var user = (document.getElementById('loginUser').value || '').trim().toLowerCase();
@@ -9589,7 +9585,10 @@ function dashboardLogin(event) {
     if (err) err.style.display = 'block';
     return false;
   }
-  try { sessionStorage.setItem('dashboardAuthed', 'true'); } catch(e) {}
+  try {
+    var twoHoursMs = 2 * 60 * 60 * 1000;
+    localStorage.setItem('dashboardAuthExpiresAt', String(Date.now() + twoHoursMs));
+  } catch(e) {}
   var splash = document.getElementById('loginSplash');
   if (splash) {
     splash.style.transition = 'opacity .45s ease, transform .45s ease';
