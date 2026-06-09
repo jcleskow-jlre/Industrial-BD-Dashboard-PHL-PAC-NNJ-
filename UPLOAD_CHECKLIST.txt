@@ -1,0 +1,8 @@
+# PHL-PAC-NNJ Industrial Market Intelligence & BD Dashboard
+
+GitHub Pages upload package. Dashboard entrypoint is `index.html`.
+
+Market reports included in `market_reports/`:
+- northern_new_jersey_q1_2026.pdf
+- philadelphia_q1_2026.pdf
+- pa_i81_78_corridor_q1_2026.pdf
