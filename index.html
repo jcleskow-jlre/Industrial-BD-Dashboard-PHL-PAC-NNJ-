@@ -75,9 +75,89 @@ td{padding:11px 10px;border-top:1px solid #202942;border-bottom:1px solid #20294
 .reportImageBody img{width:min(920px,100%);height:auto;border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.35);background:white}
 .report-card .btn{cursor:pointer}
 
+
+/* --- Final compact table pass --- */
+.tableWrap{max-height:calc(100vh - 235px);overflow:auto;padding-right:2px;border-radius:16px}
+table{font-size:11px;border-spacing:0 5px}
+th{font-size:10px;padding:0 7px 5px 7px;white-space:nowrap}
+td{padding:7px 7px;line-height:1.18}
+td:first-child{border-radius:9px 0 0 9px}
+td:last-child{border-radius:0 9px 9px 0}
+#compTable td:nth-child(1),#leaseTable td:nth-child(1){min-width:108px;max-width:140px}
+#compTable td:nth-child(2),#leaseTable td:nth-child(2){min-width:120px;max-width:170px}
+#compTable td:nth-child(5){min-width:105px;max-width:145px}
+#compTable td:nth-child(6){min-width:74px;max-width:92px}
+#compTable td,#leaseTable td{overflow:hidden;text-overflow:ellipsis}
+#compTable .num,#leaseTable .num{font-variant-numeric:tabular-nums}
+.card{padding:16px}
+#compTable th,#leaseTable th{top:0}
+#compTable tbody tr,#leaseTable tbody tr{height:44px}
+.btn.mini{padding:5px 8px;font-size:10px;border-radius:8px}
+
+
+/* --- Futuristic login splash --- */
+.loginSplash{position:fixed;inset:0;z-index:99999;background:
+  radial-gradient(circle at 18% 20%,rgba(255,223,0,.20),transparent 22%),
+  radial-gradient(circle at 82% 16%,rgba(97,165,255,.22),transparent 25%),
+  radial-gradient(circle at 50% 100%,rgba(167,139,250,.16),transparent 30%),
+  #05070f;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.loginSplash::before{content:"";position:absolute;inset:-50%;background-image:
+  linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:44px 44px;transform:perspective(700px) rotateX(58deg) translateY(120px);
+  animation:gridDrift 8s linear infinite}
+.loginSplash::after{content:"";position:absolute;width:620px;height:620px;border-radius:50%;
+  border:1px solid rgba(255,223,0,.18);box-shadow:0 0 70px rgba(255,223,0,.10), inset 0 0 80px rgba(97,165,255,.08);
+  animation:pulseOrb 4.5s ease-in-out infinite}
+@keyframes gridDrift{from{background-position:0 0,0 0}to{background-position:0 44px,44px 0}}
+@keyframes pulseOrb{0%,100%{transform:scale(.96);opacity:.62}50%{transform:scale(1.04);opacity:1}}
+.loginCard{position:relative;z-index:2;width:min(480px,92vw);padding:28px;border-radius:30px;background:linear-gradient(180deg,rgba(17,22,37,.78),rgba(8,11,22,.88));border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 90px rgba(0,0,0,.55);backdrop-filter:blur(18px)}
+.loginLogoRow{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.loginLogo{width:62px;height:52px;background:var(--yellow);display:grid;place-items:center;color:#e4002b;font-size:20px;font-weight:900}
+.loginEyebrow{display:inline-flex;border:1px solid rgba(255,223,0,.45);background:rgba(255,223,0,.08);color:var(--yellow);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase}
+.loginCard h1{margin:14px 0 6px;font-size:34px;line-height:1;letter-spacing:-.05em}
+.loginCard p{margin:0 0 18px;color:#bfc8df;line-height:1.45}
+.loginField{margin:12px 0}
+.loginField label{display:block;color:#aeb8d4;font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;margin-bottom:7px}
+.loginField input{width:100%;min-width:0;background:#0b1020;border:1px solid #303954;color:white;border-radius:16px;padding:14px 14px;font-size:14px;outline:none}
+.loginField input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,223,0,.12)}
+.loginButton{width:100%;margin-top:12px;border:0;border-radius:16px;padding:14px;background:linear-gradient(90deg,var(--yellow),#ffe86a);color:#101010;font-weight:950;letter-spacing:.02em;cursor:pointer}
+.loginError{display:none;margin-top:10px;color:#ff9aa3;font-size:12px;font-weight:800}
+.loginMeta{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.loginMeta span{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);border-radius:999px;padding:7px 9px;color:#dfe6f8;font-size:11px}
+body.locked{overflow:hidden}
+body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
+
 </style>
 </head>
 <body>
+
+<div id="loginSplash" class="loginSplash">
+  <form class="loginCard" onsubmit="return dashboardLogin(event)">
+    <div class="loginLogoRow">
+      <div class="loginLogo">savills</div>
+      <div>
+        <span class="loginEyebrow">Secure Intelligence Layer</span>
+        <h1>Market Command</h1>
+      </div>
+    </div>
+    <p>PHL-PAC-NNJ Industrial Market Intelligence & BD Dashboard</p>
+    <div class="loginField">
+      <label>Username</label>
+      <input id="loginUser" type="email" autocomplete="username" placeholder="jleskow@savills.us">
+    </div>
+    <div class="loginField">
+      <label>Password</label>
+      <input id="loginPass" type="password" autocomplete="current-password" placeholder="Password">
+    </div>
+    <button class="loginButton" type="submit">Enter Dashboard</button>
+    <div id="loginError" class="loginError">Invalid username or password.</div>
+    <div class="loginMeta">
+      <span>Lease events</span><span>Comps</span><span>Market AI</span><span>Prompt engine</span>
+    </div>
+  </form>
+</div>
+
 <div class="app">
 <aside class="sidebar">
   <div class="brand"><div class="logo">savills</div><div><h1>Industrial Market Intelligence & BD Dashboard</h1><p>PHL · PAC · NNJ</p></div></div>
@@ -8770,6 +8850,41 @@ function initMarketReportButtons() {
 
 document.addEventListener('DOMContentLoaded', initMarketReportButtons);
 initMarketReportButtons();
+</script>
+
+
+<script>
+(function(){
+  document.body.classList.add('locked');
+  try {
+    if (sessionStorage.getItem('dashboardAuthed') === 'true') {
+      var splash = document.getElementById('loginSplash');
+      if (splash) splash.style.display = 'none';
+      document.body.classList.remove('locked');
+    }
+  } catch(e) {}
+})();
+function dashboardLogin(event) {
+  event.preventDefault();
+  var user = (document.getElementById('loginUser').value || '').trim().toLowerCase();
+  var pass = document.getElementById('loginPass').value || '';
+  var ok = user === 'jleskow@savills.us' && pass === 'Jcl19103$$$';
+  var err = document.getElementById('loginError');
+  if (!ok) {
+    if (err) err.style.display = 'block';
+    return false;
+  }
+  try { sessionStorage.setItem('dashboardAuthed', 'true'); } catch(e) {}
+  var splash = document.getElementById('loginSplash');
+  if (splash) {
+    splash.style.transition = 'opacity .45s ease, transform .45s ease';
+    splash.style.opacity = '0';
+    splash.style.transform = 'scale(1.02)';
+    setTimeout(function(){ splash.style.display = 'none'; }, 470);
+  }
+  document.body.classList.remove('locked');
+  return false;
+}
 </script>
 
 </body>
