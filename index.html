@@ -241,6 +241,78 @@ body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
 #leaseTable td:first-child{font-size:11px;line-height:1.12}
 #leaseTable td:nth-child(2){font-size:11px;line-height:1.12}
 
+
+/* --- Responsive QA pass: desktop / iPad / mobile --- */
+html,body{max-width:100%;overflow-x:hidden}
+.tableWrap{-webkit-overflow-scrolling:touch}
+.mobileCardList{display:none}
+.mobileHint{display:none;color:var(--muted);font-size:12px;margin:6px 0 10px}
+
+@media(max-width:1180px){
+  .app{display:block}
+  .sidebar{position:relative;height:auto;min-height:0;display:block;padding:16px;border-right:0;border-bottom:1px solid var(--line)}
+  .brand{margin-bottom:12px}
+  .nav{display:flex;flex-direction:row;gap:8px;overflow-x:auto;padding-bottom:8px}
+  .nav a{white-space:nowrap;padding:10px 12px;font-size:13px}
+  .sidebarFooter{display:none}
+  .sidebarFilters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end;border-top:1px solid var(--line);padding-top:12px;margin-top:8px}
+  .sidebarFilters h3{grid-column:1/-1;margin:0}
+  .sidebarFilters .filter-field{margin:0}
+  .sidebarFilters .filter-field label{font-size:9px}
+  .sidebarFilters input,.sidebarFilters select{font-size:12px;padding:9px 10px}
+  .sidebarFilters .btn.full{margin-top:0}
+  .sidebarFilters .count-note{grid-column:1/-1;margin:0}
+  .main{padding:18px}
+  .topbar{display:block}
+  h2{font-size:26px}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid3{grid-template-columns:1fr}
+  .layout{grid-template-columns:1fr}
+  #lease-events .tableWrap,#comps .tableWrap{max-height:70vh}
+  #leaseTable{min-width:1080px}
+  #compTable{min-width:1320px}
+  .modal-box{width:96vw;max-height:92vh}
+  .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #market-ai .report-grid,#market-ai .visual-grid{grid-template-columns:1fr}
+  #market-ai .trend-row{grid-template-columns:1fr}
+}
+
+@media(max-width:760px){
+  .main{padding:12px}
+  .sidebar{padding:12px}
+  .brand h1{font-size:13px}
+  .logo{width:46px;height:38px;font-size:15px}
+  h2{font-size:22px}
+  .subtitle{font-size:13px}
+  .pill{font-size:10px;padding:6px 9px}
+  .grid4{grid-template-columns:1fr}
+  .card,.report-card,.market-card{padding:14px;border-radius:18px}
+  .metric .value{font-size:26px}
+  .sidebarFilters{grid-template-columns:1fr}
+  .nav a{font-size:12px}
+  .mobileHint{display:block}
+  .tableWrap{border:1px solid var(--line);border-radius:14px}
+  #leaseTable{min-width:1040px}
+  #compTable{min-width:1280px}
+  th{font-size:9px}
+  td{font-size:10.5px}
+  .detail-grid{grid-template-columns:1fr}
+  textarea{min-height:260px;font-size:11px}
+  .loginCard{padding:20px;border-radius:24px}
+  .loginCard h1{font-size:28px}
+  .loginLogo{width:54px;height:46px}
+  #market-ai .metric-grid.small{grid-template-columns:1fr}
+  #market-ai .report-hero{grid-template-columns:1fr}
+  #market-ai .hero-stat b{font-size:28px}
+}
+
+/* Landscape iPad / tablet: keep nav compact and data tables usable */
+@media(min-width:761px) and (max-width:1180px) and (orientation:landscape){
+  .sidebarFilters{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .sidebarFilters h3,.sidebarFilters .count-note{grid-column:1/-1}
+  #lease-events .tableWrap,#comps .tableWrap{max-height:62vh}
+}
+
 </style>
 </head>
 <body>
@@ -314,7 +386,7 @@ body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
   <section id="lease-events">
     <div class="card">
       <div class="control-row"><h3>Lease Events</h3><span class="count-note">Filters are now in the left sidebar so the table can use the full workspace.</span></div>
-        <p class="small-note">Click column headers to sort ascending / descending. Filters update the rows below.</p>
+        <p class="small-note">Click column headers to sort ascending / descending. Filters update the rows below.</p><p class="mobileHint">On iPad/mobile, swipe horizontally inside the table to see all columns.</p>
         <div class="tableWrap">
           <table id="leaseTable">
             <thead><tr>
@@ -3059,7 +3131,7 @@ body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
     <div class="card">
       <h3>Comp Database</h3>
       <div class="control-row"><div style="flex:1"><input id="compSearch" placeholder="Search comps..." oninput="filterTable('compTable','compSearch')"></div></div>
-      <p class="small-note">Click any comp row to open the detailed record and copy a ChatGPT email prompt. Click column headers to sort ascending / descending.</p>
+      <p class="small-note">Click any comp row to open the detailed record and copy a ChatGPT email prompt. Click column headers to sort ascending / descending.</p><p class="mobileHint">On iPad/mobile, swipe horizontally inside the table to see all columns.</p>
       <div class="tableWrap">
         <table id="compTable">
           <thead><tr>
