@@ -25,6 +25,12 @@ h2{font-size:30px;margin:8px 0 4px;letter-spacing:-.04em} .subtitle{color:#bdc6d
 .hero-note{padding:14px;border:1px solid var(--line);background:#0b0f1c;border-radius:16px;color:#d4dbea;line-height:1.45}
 .hide{display:none!important}
 @media(max-width:1100px){.app{display:block}.sidebar{height:auto;position:relative}.nav{flex-direction:row;overflow:auto}.grid4,.grid3,.layout{grid-template-columns:1fr}}
+
+th.sortable{cursor:pointer;user-select:none}
+th.sortable::after{content:' ⇅';font-size:10px;color:#66708e}
+th.sortable.asc::after{content:' ↑';color:var(--yellow)}
+th.sortable.desc::after{content:' ↓';color:var(--yellow)}
+
 </style>
 </head>
 <body>
@@ -82,7 +88,19 @@ h2{font-size:30px;margin:8px 0 4px;letter-spacing:-.04em} .subtitle{color:#bdc6d
       <div class="controls"><input id="leaseSearch" placeholder="Search lease events..." oninput="filterTable('leaseTable','leaseSearch')"></div>
       <div class="tableWrap">
         <table id="leaseTable">
-          <thead><tr><th>Tenant</th><th>Address</th><th>ST</th><th>SF</th><th>Commenced</th><th>Expires</th><th>Months</th><th>Starting Rent</th><th>Current Rent</th><th>% vs Mkt</th><th>Market Rent</th></tr></thead>
+          <thead><tr>
+<th class="sortable" data-sort="text">Tenant</th>
+<th class="sortable" data-sort="text">Address</th>
+<th class="sortable" data-sort="text">ST</th>
+<th class="sortable" data-sort="number">SF</th>
+<th class="sortable" data-sort="date">Commenced</th>
+<th class="sortable" data-sort="date">Expires</th>
+<th class="sortable" data-sort="number">Months</th>
+<th class="sortable" data-sort="money">Starting Rent</th>
+<th class="sortable" data-sort="money">Current Rent</th>
+<th class="sortable" data-sort="percent"> % vs Mkt</th>
+<th class="sortable" data-sort="money">Market Rent</th>
+</tr></thead>
           <tbody>
         <tr data-search="ashley furniture industries, inc. 3003 woodbridge ave  nj exit 10 new lease">
           <td>Ashley Furniture Industries, Inc.</td><td>3003 Woodbridge Ave</td><td>NJ</td><td class="num">232,291</td>
@@ -2434,7 +2452,22 @@ h2{font-size:30px;margin:8px 0 4px;letter-spacing:-.04em} .subtitle{color:#bdc6d
       <div class="controls"><input id="compSearch" placeholder="Search comps..." oninput="filterTable('compTable','compSearch')"></div>
       <div class="tableWrap">
         <table id="compTable">
-          <thead><tr><th>Tenant Name</th><th>Street Address</th><th>City</th><th>State</th><th>Submarket</th><th>Lease Type</th><th>Square Feet</th><th>Commenced</th><th>Expires</th><th>Starting Rent</th><th>Annual Esc.</th><th>Free Rent</th><th>TI/PSF</th><th>NER</th></tr></thead>
+          <thead><tr>
+<th class="sortable" data-sort="text">Tenant Name</th>
+<th class="sortable" data-sort="text">Street Address</th>
+<th class="sortable" data-sort="text">City</th>
+<th class="sortable" data-sort="text">State</th>
+<th class="sortable" data-sort="text">Submarket</th>
+<th class="sortable" data-sort="text">Lease Type</th>
+<th class="sortable" data-sort="number">Square Feet</th>
+<th class="sortable" data-sort="date">Commenced</th>
+<th class="sortable" data-sort="date">Expires</th>
+<th class="sortable" data-sort="money">Starting Rent</th>
+<th class="sortable" data-sort="mixed">Annual Esc.</th>
+<th class="sortable" data-sort="number">Free Rent</th>
+<th class="sortable" data-sort="money">TI/PSF</th>
+<th class="sortable" data-sort="money">NER</th>
+</tr></thead>
           <tbody>
         <tr data-search="ta chen international, inc. 321 dultys ln  nj burlington county new lease">
           <td>Ta Chen International, Inc.</td><td>321 Dultys Ln</td><td></td><td>NJ</td><td>Burlington County</td>
@@ -9277,6 +9310,61 @@ function filterTable(tableId, inputId) {
     row.classList.toggle('hide', hay.indexOf(q) === -1);
   });
 }
+function cleanNumber(text) {
+  if (!text) return NaN;
+  var s = String(text).replace(/,/g,'').replace(/\$/g,'').replace(/%/g,'').replace(/SF/gi,'').replace(/PSF/gi,'').replace(/above/gi,'').replace(/below/gi,'').replace(/mo\./gi,'').trim();
+  var m = s.match(/-?\d+(\.\d+)?/);
+  return m ? parseFloat(m[0]) : NaN;
+}
+function sortValue(cell, type) {
+  var text = (cell.innerText || '').trim();
+  if (type === 'number' || type === 'money' || type === 'percent' || type === 'mixed') {
+    var n = cleanNumber(text);
+    return isNaN(n) ? null : n;
+  }
+  if (type === 'date') {
+    var d = Date.parse(text);
+    return isNaN(d) ? null : d;
+  }
+  return text.toLowerCase();
+}
+function sortTableByColumn(table, colIndex, type, direction) {
+  var tbody = table.querySelector('tbody');
+  var rows = Array.from(tbody.querySelectorAll('tr'));
+  rows.sort(function(a, b) {
+    var av = sortValue(a.children[colIndex], type);
+    var bv = sortValue(b.children[colIndex], type);
+
+    if (av === null && bv === null) return 0;
+    if (av === null) return 1;
+    if (bv === null) return -1;
+
+    if (typeof av === 'number' && typeof bv === 'number') {
+      return direction === 'asc' ? av - bv : bv - av;
+    }
+    var cmp = String(av).localeCompare(String(bv));
+    return direction === 'asc' ? cmp : -cmp;
+  });
+  rows.forEach(function(row) { tbody.appendChild(row); });
+}
+function initSortableTables() {
+  document.querySelectorAll('#leaseTable, #compTable').forEach(function(table) {
+    table.querySelectorAll('thead th').forEach(function(th, index) {
+      if (!th.classList.contains('sortable')) return;
+      th.addEventListener('click', function() {
+        var current = th.getAttribute('data-direction') || '';
+        var next = current === 'asc' ? 'desc' : 'asc';
+        table.querySelectorAll('thead th').forEach(function(other) {
+          other.classList.remove('asc','desc');
+          other.removeAttribute('data-direction');
+        });
+        th.setAttribute('data-direction', next);
+        th.classList.add(next);
+        sortTableByColumn(table, index, th.getAttribute('data-sort') || 'text', next);
+      });
+    });
+  });
+}
 function exportVisibleTable() {
   var tables = Array.from(document.querySelectorAll('section:target table'));
   if (!tables.length) tables = Array.from(document.querySelectorAll('table'));
@@ -9294,6 +9382,8 @@ function exportVisibleTable() {
   a.download = 'dashboard_export.csv';
   a.click();
 }
+document.addEventListener('DOMContentLoaded', initSortableTables);
+initSortableTables();
 </script>
 </body>
 </html>
