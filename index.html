@@ -26,10 +26,16 @@ h2{font-size:30px;margin:8px 0 4px;letter-spacing:-.04em} .subtitle{color:#bdc6d
 .hide{display:none!important}
 @media(max-width:1100px){.app{display:block}.sidebar{height:auto;position:relative}.nav{flex-direction:row;overflow:auto}.grid4,.grid3,.layout{grid-template-columns:1fr}}
 
-th.sortable{cursor:pointer;user-select:none}
-th.sortable::after{content:' ⇅';font-size:10px;color:#66708e}
-th.sortable.asc::after{content:' ↑';color:var(--yellow)}
-th.sortable.desc::after{content:' ↓';color:var(--yellow)}
+
+
+th.sortable{cursor:pointer;user-select:none;white-space:nowrap;position:sticky;top:0;background:#0a0d17;z-index:3}
+th.sortable .sort-label{display:inline-flex;align-items:center;gap:5px}
+th.sortable .sort-icon{font-size:11px;color:#75809d}
+th.sortable.asc .sort-icon,th.sortable.desc .sort-icon{color:var(--yellow)}
+th.sortable.asc .sort-icon::before{content:'▲'}
+th.sortable.desc .sort-icon::before{content:'▼'}
+th.sortable:not(.asc):not(.desc) .sort-icon::before{content:'↕'}
+.sort-help{color:var(--muted);font-size:12px;margin:4px 0 10px}
 
 </style>
 </head>
@@ -85,21 +91,21 @@ th.sortable.desc::after{content:' ↓';color:var(--yellow)}
   <section id="lease-events">
     <div class="card">
       <h3>Lease Events</h3>
-      <div class="controls"><input id="leaseSearch" placeholder="Search lease events..." oninput="filterTable('leaseTable','leaseSearch')"></div>
+      <div class="controls"><input id="leaseSearch" placeholder="Search lease events..." oninput="filterTable('leaseTable','leaseSearch')"></div><div class="sort-help">Click any column header to sort ascending. Click again to sort descending.</div>
       <div class="tableWrap">
         <table id="leaseTable">
           <thead><tr>
-<th class="sortable" data-sort="text">Tenant</th>
-<th class="sortable" data-sort="text">Address</th>
-<th class="sortable" data-sort="text">ST</th>
-<th class="sortable" data-sort="number">SF</th>
-<th class="sortable" data-sort="date">Commenced</th>
-<th class="sortable" data-sort="date">Expires</th>
-<th class="sortable" data-sort="number">Months</th>
-<th class="sortable" data-sort="money">Starting Rent</th>
-<th class="sortable" data-sort="money">Current Rent</th>
-<th class="sortable" data-sort="percent"> % vs Mkt</th>
-<th class="sortable" data-sort="money">Market Rent</th>
+<th class="sortable" data-sort="text"><span class="sort-label">Tenant<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="text"><span class="sort-label">Address<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="text"><span class="sort-label">ST<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="number"><span class="sort-label">SF<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="date"><span class="sort-label">Commenced<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="date"><span class="sort-label">Expires<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="number"><span class="sort-label">Months<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="money"><span class="sort-label">Starting Rent<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="money"><span class="sort-label">Current Rent<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="percent"><span class="sort-label">% vs Mkt<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="money"><span class="sort-label">Market Rent<span class="sort-icon"></span></span></th>
 </tr></thead>
           <tbody>
         <tr data-search="ashley furniture industries, inc. 3003 woodbridge ave  nj exit 10 new lease">
@@ -2449,24 +2455,24 @@ th.sortable.desc::after{content:' ↓';color:var(--yellow)}
   <section id="comps">
     <div class="card">
       <h3>Comp Database</h3>
-      <div class="controls"><input id="compSearch" placeholder="Search comps..." oninput="filterTable('compTable','compSearch')"></div>
+      <div class="controls"><input id="compSearch" placeholder="Search comps..." oninput="filterTable('compTable','compSearch')"></div><div class="sort-help">Click any column header to sort ascending. Click again to sort descending.</div>
       <div class="tableWrap">
         <table id="compTable">
           <thead><tr>
-<th class="sortable" data-sort="text">Tenant Name</th>
-<th class="sortable" data-sort="text">Street Address</th>
-<th class="sortable" data-sort="text">City</th>
-<th class="sortable" data-sort="text">State</th>
-<th class="sortable" data-sort="text">Submarket</th>
-<th class="sortable" data-sort="text">Lease Type</th>
-<th class="sortable" data-sort="number">Square Feet</th>
-<th class="sortable" data-sort="date">Commenced</th>
-<th class="sortable" data-sort="date">Expires</th>
-<th class="sortable" data-sort="money">Starting Rent</th>
-<th class="sortable" data-sort="mixed">Annual Esc.</th>
-<th class="sortable" data-sort="number">Free Rent</th>
-<th class="sortable" data-sort="money">TI/PSF</th>
-<th class="sortable" data-sort="money">NER</th>
+<th class="sortable" data-sort="text"><span class="sort-label">Tenant Name<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="text"><span class="sort-label">Street Address<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="text"><span class="sort-label">City<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="text"><span class="sort-label">State<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="text"><span class="sort-label">Submarket<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="text"><span class="sort-label">Lease Type<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="number"><span class="sort-label">Square Feet<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="date"><span class="sort-label">Commenced<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="date"><span class="sort-label">Expires<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="money"><span class="sort-label">Starting Rent<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="mixed"><span class="sort-label">Annual Esc.<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="number"><span class="sort-label">Free Rent<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="money"><span class="sort-label">TI/PSF<span class="sort-icon"></span></span></th>
+<th class="sortable" data-sort="money"><span class="sort-label">NER<span class="sort-icon"></span></span></th>
 </tr></thead>
           <tbody>
         <tr data-search="ta chen international, inc. 321 dultys ln  nj burlington county new lease">
@@ -9312,28 +9318,41 @@ function filterTable(tableId, inputId) {
 }
 function cleanNumber(text) {
   if (!text) return NaN;
-  var s = String(text).replace(/,/g,'').replace(/\$/g,'').replace(/%/g,'').replace(/SF/gi,'').replace(/PSF/gi,'').replace(/above/gi,'').replace(/below/gi,'').replace(/mo\./gi,'').trim();
+  var s = String(text)
+    .replace(/,/g,'')
+    .replace(/\$/g,'')
+    .replace(/%/g,'')
+    .replace(/SF/gi,'')
+    .replace(/PSF/gi,'')
+    .replace(/above/gi,'')
+    .replace(/below/gi,'')
+    .replace(/mo\./gi,'')
+    .trim();
   var m = s.match(/-?\d+(\.\d+)?/);
   return m ? parseFloat(m[0]) : NaN;
 }
-function sortValue(cell, type) {
+function getCellSortValue(cell, type) {
   var text = (cell.innerText || '').trim();
+
   if (type === 'number' || type === 'money' || type === 'percent' || type === 'mixed') {
     var n = cleanNumber(text);
     return isNaN(n) ? null : n;
   }
+
   if (type === 'date') {
     var d = Date.parse(text);
     return isNaN(d) ? null : d;
   }
+
   return text.toLowerCase();
 }
 function sortTableByColumn(table, colIndex, type, direction) {
   var tbody = table.querySelector('tbody');
   var rows = Array.from(tbody.querySelectorAll('tr'));
+
   rows.sort(function(a, b) {
-    var av = sortValue(a.children[colIndex], type);
-    var bv = sortValue(b.children[colIndex], type);
+    var av = getCellSortValue(a.children[colIndex], type);
+    var bv = getCellSortValue(b.children[colIndex], type);
 
     if (av === null && bv === null) return 0;
     if (av === null) return 1;
@@ -9342,25 +9361,33 @@ function sortTableByColumn(table, colIndex, type, direction) {
     if (typeof av === 'number' && typeof bv === 'number') {
       return direction === 'asc' ? av - bv : bv - av;
     }
-    var cmp = String(av).localeCompare(String(bv));
+
+    var cmp = String(av).localeCompare(String(bv), undefined, {numeric:true, sensitivity:'base'});
     return direction === 'asc' ? cmp : -cmp;
   });
+
   rows.forEach(function(row) { tbody.appendChild(row); });
 }
 function initSortableTables() {
   document.querySelectorAll('#leaseTable, #compTable').forEach(function(table) {
-    table.querySelectorAll('thead th').forEach(function(th, index) {
-      if (!th.classList.contains('sortable')) return;
+    table.querySelectorAll('thead th.sortable').forEach(function(th, index) {
+      // prevent duplicate listeners if this function runs more than once
+      if (th.dataset.sortReady === 'true') return;
+      th.dataset.sortReady = 'true';
+
       th.addEventListener('click', function() {
-        var current = th.getAttribute('data-direction') || '';
-        var next = current === 'asc' ? 'desc' : 'asc';
-        table.querySelectorAll('thead th').forEach(function(other) {
-          other.classList.remove('asc','desc');
+        var currentDirection = th.getAttribute('data-direction');
+        var nextDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+
+        table.querySelectorAll('thead th.sortable').forEach(function(other) {
+          other.classList.remove('asc', 'desc');
           other.removeAttribute('data-direction');
         });
-        th.setAttribute('data-direction', next);
-        th.classList.add(next);
-        sortTableByColumn(table, index, th.getAttribute('data-sort') || 'text', next);
+
+        th.setAttribute('data-direction', nextDirection);
+        th.classList.add(nextDirection);
+
+        sortTableByColumn(table, index, th.getAttribute('data-sort') || 'text', nextDirection);
       });
     });
   });
@@ -9370,12 +9397,17 @@ function exportVisibleTable() {
   if (!tables.length) tables = Array.from(document.querySelectorAll('table'));
   var table = tables[0];
   if (!table) return alert('No table found.');
-  var rows = Array.from(table.querySelectorAll('tr')).filter(function(r){return !r.classList.contains('hide');});
+
+  var rows = Array.from(table.querySelectorAll('tr')).filter(function(r){
+    return !r.classList.contains('hide');
+  });
+
   var csv = rows.map(function(row){
     return Array.from(row.children).map(function(cell){
       return '"' + (cell.innerText || '').replace(/"/g,'""') + '"';
     }).join(',');
   }).join('\n');
+
   var blob = new Blob([csv], {type:'text/csv'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
