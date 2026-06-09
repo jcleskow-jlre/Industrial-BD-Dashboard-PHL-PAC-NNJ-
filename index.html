@@ -128,6 +128,31 @@ td:last-child{border-radius:0 9px 9px 0}
 body.locked{overflow:hidden}
 body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
 
+
+/* --- Market AI readability pass --- */
+#market-ai .grid3{grid-template-columns:1fr;gap:16px}
+#market-ai .market-card{max-width:100%;overflow:hidden}
+#market-ai .market-card-head{align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+#market-ai .market-card-head h3{font-size:20px;margin:0}
+#market-ai .market-card-head span{white-space:nowrap}
+#market-ai .metric-grid.small{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#market-ai .metric-grid.small div{min-height:72px}
+#market-ai .mini-table{width:100%;table-layout:auto;font-size:11px;margin-top:14px;border-collapse:separate;border-spacing:0}
+#market-ai .mini-table th,#market-ai .mini-table td{padding:9px 10px;border-bottom:1px solid #202942;white-space:nowrap}
+#market-ai .mini-table th{position:static;background:#0b0f1c;color:#b7c0d8;font-size:10px}
+#market-ai .mini-table th:first-child,#market-ai .mini-table td:first-child{min-width:86px;text-align:left}
+#market-ai .mini-table th:not(:first-child),#market-ai .mini-table td:not(:first-child){text-align:right}
+#market-ai .mini-table tbody tr:nth-child(even) td{background:rgba(255,255,255,.025)}
+#market-ai .visual-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+#market-ai .visual-card{min-height:270px}
+#market-ai .bar-row{gap:7px}
+#market-ai .bar-track{height:16px}
+#market-ai .card{overflow:hidden}
+@media(max-width:1400px){
+  #market-ai .visual-grid{grid-template-columns:1fr}
+  #market-ai .metric-grid.small{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
 </style>
 </head>
 <body>
@@ -8412,7 +8437,7 @@ body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
 
     <div class="card" style="margin-top:14px">
       <h3>Detailed comp breakdown | last 18 months</h3>
-      <p class="note">Recent comp economics are broken down by market. Free rent, TI, and total concessions are normalized to PSF/year so different lease terms can be compared more cleanly.</p>
+      <p class="note">Recent comp economics are broken down by market. Free rent, TI, and total concessions are normalized to PSF/year so different lease terms can be compared more cleanly. Quarterly rows are sorted most recent to least recent.</p>
       <div class="grid3">
         
     <div class="market-card">
@@ -8427,7 +8452,13 @@ body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
       </div>
       <table class="mini-table">
         <thead><tr><th>Quarter</th><th>Count</th><th>Avg Start</th><th>Avg NER</th><th>Free/Yr</th><th>TI/Yr</th><th>Total/Yr</th></tr></thead>
-        <tbody><tr><td>2024 Q4</td><td>3</td><td>$14.42</td><td>$15.31</td><td>$0.00</td><td>$0.00</td><td>$0.00</td></tr><tr><td>2025 Q1</td><td>18</td><td>$17.77</td><td>$19.48</td><td>$1.04</td><td>$0.23</td><td>$1.27</td></tr><tr><td>2025 Q2</td><td>10</td><td>$15.53</td><td>$15.71</td><td>$0.62</td><td>$0.49</td><td>$1.11</td></tr><tr><td>2025 Q3</td><td>20</td><td>$15.91</td><td>$16.00</td><td>$1.07</td><td>$0.24</td><td>$1.31</td></tr><tr><td>2025 Q4</td><td>19</td><td>$15.02</td><td>$15.82</td><td>$0.64</td><td>$0.18</td><td>$0.82</td></tr><tr><td>2026 Q1</td><td>16</td><td>$16.49</td><td>$17.08</td><td>$0.91</td><td>$0.08</td><td>$0.99</td></tr><tr><td>2026 Q2</td><td>7</td><td>$14.95</td><td>$15.39</td><td>$1.05</td><td>$0.10</td><td>$1.15</td></tr></tbody>
+        <tbody><tr><td>2026 Q2</td><td>7</td><td>$14.95</td><td>$15.39</td><td>$1.05</td><td>$0.10</td><td>$1.15</td></tr>
+<tr><td>2026 Q1</td><td>16</td><td>$16.49</td><td>$17.08</td><td>$0.91</td><td>$0.08</td><td>$0.99</td></tr>
+<tr><td>2025 Q4</td><td>19</td><td>$15.02</td><td>$15.82</td><td>$0.64</td><td>$0.18</td><td>$0.82</td></tr>
+<tr><td>2025 Q3</td><td>20</td><td>$15.91</td><td>$16.00</td><td>$1.07</td><td>$0.24</td><td>$1.31</td></tr>
+<tr><td>2025 Q2</td><td>10</td><td>$15.53</td><td>$15.71</td><td>$0.62</td><td>$0.49</td><td>$1.11</td></tr>
+<tr><td>2025 Q1</td><td>18</td><td>$17.77</td><td>$19.48</td><td>$1.04</td><td>$0.23</td><td>$1.27</td></tr>
+<tr><td>2024 Q4</td><td>3</td><td>$14.42</td><td>$15.31</td><td>$0.00</td><td>$0.00</td><td>$0.00</td></tr></tbody>
       </table>
     </div>
     
@@ -8444,7 +8475,13 @@ body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
       </div>
       <table class="mini-table">
         <thead><tr><th>Quarter</th><th>Count</th><th>Avg Start</th><th>Avg NER</th><th>Free/Yr</th><th>TI/Yr</th><th>Total/Yr</th></tr></thead>
-        <tbody><tr><td>2024 Q4</td><td>2</td><td>$11.35</td><td>$11.85</td><td>$0.55</td><td>$0.13</td><td>$0.68</td></tr><tr><td>2025 Q1</td><td>5</td><td>$11.51</td><td>$12.11</td><td>$0.73</td><td>$0.17</td><td>$0.90</td></tr><tr><td>2025 Q2</td><td>7</td><td>$11.39</td><td>$10.87</td><td>$0.60</td><td>$0.64</td><td>$1.23</td></tr><tr><td>2025 Q3</td><td>7</td><td>$11.79</td><td>$12.11</td><td>$0.56</td><td>$0.29</td><td>$0.85</td></tr><tr><td>2025 Q4</td><td>5</td><td>$11.59</td><td>$12.10</td><td>$0.21</td><td>$0.12</td><td>$0.33</td></tr><tr><td>2026 Q1</td><td>7</td><td>$12.33</td><td>$13.20</td><td>$0.57</td><td>$0.16</td><td>$0.73</td></tr><tr><td>2026 Q2</td><td>4</td><td>$11.69</td><td>$12.20</td><td>$0.00</td><td>$0.50</td><td>$0.50</td></tr></tbody>
+        <tbody><tr><td>2026 Q2</td><td>4</td><td>$11.69</td><td>$12.20</td><td>$0.00</td><td>$0.50</td><td>$0.50</td></tr>
+<tr><td>2026 Q1</td><td>7</td><td>$12.33</td><td>$13.20</td><td>$0.57</td><td>$0.16</td><td>$0.73</td></tr>
+<tr><td>2025 Q4</td><td>5</td><td>$11.59</td><td>$12.10</td><td>$0.21</td><td>$0.12</td><td>$0.33</td></tr>
+<tr><td>2025 Q3</td><td>7</td><td>$11.79</td><td>$12.11</td><td>$0.56</td><td>$0.29</td><td>$0.85</td></tr>
+<tr><td>2025 Q2</td><td>7</td><td>$11.39</td><td>$10.87</td><td>$0.60</td><td>$0.64</td><td>$1.23</td></tr>
+<tr><td>2025 Q1</td><td>5</td><td>$11.51</td><td>$12.11</td><td>$0.73</td><td>$0.17</td><td>$0.90</td></tr>
+<tr><td>2024 Q4</td><td>2</td><td>$11.35</td><td>$11.85</td><td>$0.55</td><td>$0.13</td><td>$0.68</td></tr></tbody>
       </table>
     </div>
     
@@ -8461,7 +8498,13 @@ body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
       </div>
       <table class="mini-table">
         <thead><tr><th>Quarter</th><th>Count</th><th>Avg Start</th><th>Avg NER</th><th>Free/Yr</th><th>TI/Yr</th><th>Total/Yr</th></tr></thead>
-        <tbody><tr><td>2024 Q4</td><td>2</td><td>$8.70</td><td>$8.96</td><td>$0.31</td><td>$0.81</td><td>$1.11</td></tr><tr><td>2025 Q1</td><td>7</td><td>$11.34</td><td>$11.86</td><td>$0.15</td><td>$0.23</td><td>$0.38</td></tr><tr><td>2025 Q2</td><td>5</td><td>$10.17</td><td>$10.72</td><td>$0.14</td><td>$0.03</td><td>$0.16</td></tr><tr><td>2025 Q3</td><td>8</td><td>$9.87</td><td>$10.49</td><td>$0.11</td><td>$0.50</td><td>$0.61</td></tr><tr><td>2025 Q4</td><td>6</td><td>$10.52</td><td>$10.71</td><td>$0.35</td><td>$0.26</td><td>$0.60</td></tr><tr><td>2026 Q1</td><td>12</td><td>$9.78</td><td>$10.47</td><td>$0.12</td><td>$0.26</td><td>$0.38</td></tr><tr><td>2026 Q2</td><td>5</td><td>$10.71</td><td>$11.03</td><td>$0.20</td><td>$0.62</td><td>$0.82</td></tr></tbody>
+        <tbody><tr><td>2026 Q2</td><td>5</td><td>$10.71</td><td>$11.03</td><td>$0.20</td><td>$0.62</td><td>$0.82</td></tr>
+<tr><td>2026 Q1</td><td>12</td><td>$9.78</td><td>$10.47</td><td>$0.12</td><td>$0.26</td><td>$0.38</td></tr>
+<tr><td>2025 Q4</td><td>6</td><td>$10.52</td><td>$10.71</td><td>$0.35</td><td>$0.26</td><td>$0.60</td></tr>
+<tr><td>2025 Q3</td><td>8</td><td>$9.87</td><td>$10.49</td><td>$0.11</td><td>$0.50</td><td>$0.61</td></tr>
+<tr><td>2025 Q2</td><td>5</td><td>$10.17</td><td>$10.72</td><td>$0.14</td><td>$0.03</td><td>$0.16</td></tr>
+<tr><td>2025 Q1</td><td>7</td><td>$11.34</td><td>$11.86</td><td>$0.15</td><td>$0.23</td><td>$0.38</td></tr>
+<tr><td>2024 Q4</td><td>2</td><td>$8.70</td><td>$8.96</td><td>$0.31</td><td>$0.81</td><td>$1.11</td></tr></tbody>
       </table>
     </div>
     
@@ -8474,7 +8517,7 @@ body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
       <div class="card metric"><div class="label">Reports Embedded</div><div class="value">3</div><div class="sub">NNJ, Philadelphia, PA I-81/78</div><div class="spark"><span style="width:100%"></span></div></div>
       <div class="card metric"><div class="label">Comp Rows Displayed</div><div class="value">900</div><div class="sub">clickable detail rows</div><div class="spark"><span style="width:80%"></span></div></div>
       <div class="card metric"><div class="label">Lease Rows Displayed</div><div class="value">390</div><div class="sub">filterable near-term events</div><div class="spark"><span style="width:70%"></span></div></div>
-      <div class="card metric"><div class="label">Package Type</div><div class="value">1 file</div><div class="sub">index.html + optional .nojekyll</div><div class="spark"><span style="width:100%"></span></div></div>
+      <div class="card metric"><div class="label">Market AI Visuals</div><div class="value">3</div><div class="sub">bar-graph comparison cards</div><div class="spark"><span style="width:100%"></span></div></div>
     </div>
   </section>
 </main>
