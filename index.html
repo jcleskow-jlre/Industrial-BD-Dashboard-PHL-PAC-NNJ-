@@ -187,7 +187,6 @@ body.locked .app{filter:blur(5px);pointer-events:none;user-select:none}
 <main class="main">
   <div class="topbar">
     <div><span class="pill">Industrial Advisory</span><h2>PHL-PAC-NNJ Market Command Center</h2><p class="subtitle">Live intelligence layer for lease events, comps, tenant leverage, and market-by-market comp analytics.</p></div>
-    <button class="btn secondary" onclick="exportVisibleTable()">Export Current Table</button>
   </div>
 
   <section id="overview">
@@ -8759,23 +8758,6 @@ function copyPrompt() {
     document.execCommand('copy');
     alert('Prompt copied.');
   });
-}
-function exportVisibleTable() {
-  var tables = Array.from(document.querySelectorAll('section:target table'));
-  if (!tables.length) tables = Array.from(document.querySelectorAll('table'));
-  var table = tables[0];
-  if (!table) return alert('No table found.');
-  var rows = Array.from(table.querySelectorAll('tr')).filter(function(r){return !r.classList.contains('hide');});
-  var csv = rows.map(function(row){
-    return Array.from(row.children).map(function(cell){
-      return '"' + (cell.innerText || '').replace(/"/g,'""') + '"';
-    }).join(',');
-  }).join('\n');
-  var blob = new Blob([csv], {type:'text/csv'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'dashboard_export.csv';
-  a.click();
 }
 document.addEventListener('DOMContentLoaded', function() {
   initSortableTables();
